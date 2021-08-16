@@ -3,10 +3,10 @@ import setuptools
 setuptools.setup(
     name="mcsim",
     version="0.0.1",
-    author="Anna Weber",
+    author="Anna Weber, Joyce Kim",
     author_email="annaweberdev@gmail.com",
     description="A package for running a Monte Carlo simulation",
-    long_description="A Python package which performs MC simulation using the python standard libraries.",
+    long_description="A Python package which performs MC simulation",
     long_description_content_type="text/markdown",
     url="https://github.com/USERNAME/REPONAME",
     project_urls={
