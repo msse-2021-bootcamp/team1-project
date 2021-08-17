@@ -6,6 +6,7 @@ import mcsim.monte_carlo as mc
 import math
 import numpy as np
 import random
+import os
 
 def test_calculate_distance_1():
 
@@ -81,3 +82,22 @@ def test_calculate_pair_energy():
     test_coords = [[0,0,0], [0, 0, 2**(1/6)], [0 ,0 , 2*2**(1/6)]]
     assert mc.calculate_pair_energy(test_coords, 1, 10, 3) == -2
 
+def test_calculate_pair_energy_np():
+    test_coords = np.array([[0,0,0], [0, 0, 2**(1/6)], [0 ,0 , 2*2**(1/6)]])
+    assert mc.calculate_pair_energy(test_coords, 1, 10, 3) == -2
+
+def test_calculate_total_energy():
+    coordinates = [[0, 0, 0], [0, math.pow(2, 1/6), 0], [0, 2*math.pow(2, 1/6), 0]]
+    total_energy = mc.calculate_total_energy(coordinates,0,3)
+    assert math.isclose(total_energy,-2,rel_tol=0.05)
+
+def test_calculate_total_energy_np():
+    coordinates = np.array([[0, 0, 0], [0, math.pow(2, 1/6), 0], [0, 2*math.pow(2, 1/6), 0]])
+    total_energy = mc.calculate_total_energy_np(coordinates,0,3)
+    assert math.isclose(total_energy,-2,rel_tol=0.05)
+
+def test_calculate_LJ():
+    assert mc.calculate_LJ(math.pow(2, (1/6))) == -1
+
+def test_calculate_LJ_np():
+    assert np.isclose(mc.calculate_LJ_np(np.array([math.pow(2, (1/6))])), [-1],rtol=0.05)
