@@ -34,7 +34,7 @@ int main()
     
     int a = 0;
     int b = 1;
-    int n = 900;
+    int n = 190;
 
  
     
