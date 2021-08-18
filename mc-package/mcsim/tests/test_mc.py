@@ -81,3 +81,34 @@ def test_calculate_pair_energy():
     test_coords = [[0,0,0], [0, 0, 2**(1/6)], [0 ,0 , 2*2**(1/6)]]
     assert mc.calculate_pair_energy(test_coords, 1, 10, 3) == -2
 
+def test_calculate_total_energy():
+    coordinates = [[0, 0, 0], [0, math.pow(2, 1/6), 0], [0, 2*math.pow(2, 1/6), 0]]
+    assert math.isclose(mc.calculate_total_energy(coordinates,None,3.0), -2, rel_tol=0.05)
+
+def test_calculate_total_energy_np():
+    coordinates = np.array([[0, 0, 0], [0, math.pow(2, 1/6), 0], [0, 2*math.pow(2, 1/6), 0]])
+    assert np.isclose(mc.calculate_total_energy(coordinates,None,3.0), -2, rtol=0.05)
+
+def test_calculate_LJ():
+    assert mc.calculate_LJ(math.pow(2, (1/6))) == -1
+
+def test_calculate_LJ_np():
+    assert mc.calculate_LJ_np(np.array([math.pow(2, (1/6)),-1])).all() == np.array([-1,0]).all()
+
+def test_calculate_tail_correction():
+    num_particles = 10.0
+    box_length = 1.0
+    cutoff = 1.0
+
+    expected = (8.0*math.pi/3.0)*100.0*(-2.0/3.0)
+    assert math.isclose(mc.calculate_tail_correction(num_particles,box_length,cutoff),expected)
+
+def test_calculate_pair_energy():
+    coordinates = [[0, 0, 0], [0, 0, 2**(1/6)], [0, 0, 2*(2**(1/6))]]
+    assert mc.calculate_pair_energy(coordinates, 1, 10.0, 3.0) == -2
+
+
+def test_calculate_pair_energy_np():
+    coordinates = np.array([[0, 0, 0], [0, 0, 2**(1/6)], [0, 0, 2*(2**(1/6))]])
+    assert mc.calculate_pair_energy(coordinates, 1, 10.0, 3.0) == -2
+
