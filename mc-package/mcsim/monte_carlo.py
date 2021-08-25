@@ -1,10 +1,34 @@
 import math
 import random
 import numpy as np
+from copy import deepcopy
 
 """
 Functions For running a Monte Carlo Simulation
 """
+
+def generate_config(num_particles, particle_density):
+    """
+    Generate initial system configurations for a Monte Carlo simulation given num_particles and  box_size
+   
+    Parameters
+    ----------
+    num_particles: int
+        The number of particles to include in the system
+    particle_density: float
+        the density of the particles within hte simulation
+    Returns
+    -------
+    coordinates: list[list]
+        List of coordinates of particles that make up the system
+    box_length: float
+        The legth of one side of the box containing the particles. Assumes box is cubic.
+        
+    """
+    box_size = num_particles / particle_density
+    box_length = box_size**(1/3)
+    return [[random.uniform(-box_length/2,box_length/2) for j in range(3)] for i in range(num_particles)], box_length
+    
 
 def calculate_total_energy(coordinates, box_length, cutoff):
     """
@@ -63,7 +87,7 @@ def calculate_total_energy_np(coordinates, box_length, cutoff):
     
     num_atoms = len(coordinates)
 
-    pair_energies = np.array([calculate_pair_energy_np(coordinates,i,box_length,cutoff) for i in range(num_atoms)])
+    pair_energies = np.array([calculate_pair_energy_np(coordinates,i,box_length,cutoff,i+1) for i in range(num_atoms)])
     
     return pair_energies.sum()
 
@@ -344,7 +368,7 @@ def calculate_pair_energy(coordinates, i_particle, box_length, cutoff):
     return e_total
 
 
-def calculate_pair_energy_np(coordinates, i_particle, box_length, cutoff):
+def calculate_pair_energy_np(coordinates, i_particle, box_length, cutoff,j_particle=0):
     """
     Calculate interaction energy of particle w/ its environment (all other particles in sys)
     
@@ -358,6 +382,8 @@ def calculate_pair_energy_np(coordinates, i_particle, box_length, cutoff):
         simulation cutoff. beyond distances, interactions aren't calculated 
     box length : float
         length of simultion box. assumes cubic boc
+    j_particle: int
+        particle number to start comparisons at default is zero 
         
     Returns
     ---------------
@@ -366,7 +392,9 @@ def calculate_pair_energy_np(coordinates, i_particle, box_length, cutoff):
         
     """
 
-    particle_distances  = calculate_distance_np(coordinates[i_particle], coordinates[i_particle+1:], box_length) 
+    particle_distances  = calculate_distance_np(coordinates[i_particle], coordinates[j_particle:], box_length) 
+    if j_particle == 0:
+        particle_distances[i_particle] = cutoff*2
     particle_distances_filtered = particle_distances[particle_distances < cutoff]
     return calculate_LJ_np(particle_distances_filtered).sum()
 
@@ -465,6 +493,8 @@ def run_simulation_np(coordinates, box_length, cutoff, reduced_temperature, num_
 
     total_energy += tail_correction
 
+    coords_list = []
+
     for step in range(num_steps):
             
         # 1. Randomly pick one of particles
@@ -496,4 +526,7 @@ def run_simulation_np(coordinates, box_length, cutoff, reduced_temperature, num_
 
         #8. print energy if step is multiple of freq
         if step % freq == 0:
+            #save coords here
+            coords_list.append(deepcopy(coordinates))
             print(step, total_energy/num_particles)
+    return coords_list

@@ -11,6 +11,7 @@ from mcsim.monte_carlo import calculate_distance
 from mcsim.monte_carlo import calculate_distance_np
 from mcsim.monte_carlo import calculate_pair_energy
 from mcsim.monte_carlo import calculate_pair_energy_np
+from mcsim.monte_carlo import generate_config
 
 __all__ = [
     'run_simulation_np',
@@ -25,5 +26,6 @@ __all__ = [
     'calculate_distance',
     'calculate_distance_np',
     'calculate_pair_energy',
-    'calculate_pair_energy_np'
+    'calculate_pair_energy_np',
+    'generate_config'
 ]

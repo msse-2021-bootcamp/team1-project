@@ -7,6 +7,7 @@ import math
 import numpy as np
 import random
 
+
 def test_calculate_distance_1():
 
     points1 = [0, 0, 0]
@@ -110,5 +111,5 @@ def test_calculate_pair_energy():
 
 def test_calculate_pair_energy_np():
     coordinates = np.array([[0, 0, 0], [0, 0, 2**(1/6)], [0, 0, 2*(2**(1/6))]])
-    assert mc.calculate_pair_energy(coordinates, 1, 10.0, 3.0) == -2
+    assert mc.calculate_pair_energy_np(coordinates, 1, 10.0, 3.0) == -2
 
